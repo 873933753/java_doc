@@ -1,0 +1,61 @@
+package com.tang.missu.api.v1;
+
+//import org.springframework.stereotype.Controller;
+import com.tang.missu.sample.ISkill;
+//import com.tang.missu.sample.hero.Diana;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+//import org.springframework.context.annotation.Lazy;
+import org.springframework.web.bind.annotation.*;
+
+// 注解，给某个类或方法打上标记，就会知道加载它
+//@Controller // 视图
+//@ResponseBody // 可以提到控制器上，就不用每个方法都写@ResponseBody
+@RestController // @RestController 包含了 @Controller和@ResponseBody
+@RequestMapping("/v1/banner") // url都加上前缀
+//@Lazy // 延迟实例化
+public class BannerController {
+
+    /*注入-setter方式注入*/
+    /*private Diana diana;
+    @Autowired
+    public void setDiana(Diana diana) {
+        this.diana = diana;
+    }*/
+
+    /* @Autowired注解 - 注入对象，属性注入 */
+    @Autowired
+    @Qualifier("diana")
+//    private Diana diana;
+    private ISkill daji;
+    // 依赖倒置原则，依赖抽象，所以这里是ISkill这个interface，不要固定使用Diana这个类
+
+
+
+    //注入对象 -  构造函数注入
+    /*@Autowired
+    public BannerController(Diana diana) {
+        this.diana = diana;
+    }*/
+
+    @GetMapping("/test") /*get请求，url为 /v1/banner/test */
+//    @PostMapping post请求
+//    @PutMapping
+//    @DeleteMapping
+
+    /*@RequestMapping更强大，value和method可以是多个值
+    *
+    * */
+//    @RequestMapping(value = "/test1",method = {RequestMethod.GET,RequestMethod.POST})
+//    @ResponseBody /*作用是告诉 Spring：请把这个方法的返回值直接作为 HTTP 响应体（Response Body）写回去，不要走视图解析流程*
+    public String test() {
+        daji.skillA(); // 这里就可以直接调用diana的方法
+        return  "hi,ham，你好，十一月";
+    }
+
+    @RequestMapping(value = "/test1",method = {RequestMethod.GET,RequestMethod.POST})
+    public String test1(){
+        return  "test1";
+    }
+
+}

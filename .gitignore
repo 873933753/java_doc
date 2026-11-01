@@ -1,0 +1,18 @@
+# ===== Obsidian（本地笔记库配置，不上传）=====
+# 仓库根目录及任意子目录下的 .obsidian 配置目录
+.obsidian/
+**/.obsidian/
+
+# Obsidian 的本地回收站 / 工作区状态
+.trash/
+**/.trash/
+workspace.json
+workspace-mobile.json
+
+# ===== IDEA 工程配置（个人私有，不上传）=====
+.idea/
+**/.idea/
+
+# ===== Maven 构建产物（可重新生成，不上传）=====
+target/
+**/target/
