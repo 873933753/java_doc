@@ -51,8 +51,8 @@ public class BannerController {
 //    @ResponseBody /*作用是告诉 Spring：请把这个方法的返回值直接作为 HTTP 响应体（Response Body）写回去，不要走视图解析流程*
     public String test () {
         daji.skillA(); // 这里就可以直接调用diana的方法
-//        throw new Exception("错了");
-        throw new NotFoundException(4001);
+//        throw new RuntimeException("错了");
+        throw new NotFoundException(10001);
 //        return  "hi,ham，你好，十一月";
     }
 

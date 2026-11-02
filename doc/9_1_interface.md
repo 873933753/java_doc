@@ -90,4 +90,9 @@ public class Main {
 }
 ```
 
-# 
+
+- @ResponseBody /*作用是告诉 Spring：请把这个方法的返回值直接作为 HTTP 响应体（Response Body）写回去，不要走视图解析流程*
+- @RequestMapping更强大，value和method可以是多个值,@RequestMapping(value = "/test1",method = {RequestMethod.GET,RequestMethod.POST})
+- @RestController // @RestController 包含了 @Controller和@ResponseBody
+- @RequestMapping("/v1/banner") // url都加上前缀
+- @GetMapping("/test") /*get请求，url为 /v1/banner/test */
