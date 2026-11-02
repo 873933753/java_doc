@@ -1,6 +1,7 @@
 package com.tang.missu.api.v1;
 
 //import org.springframework.stereotype.Controller;
+import com.tang.missu.exception.http.NotFoundException;
 import com.tang.missu.sample.ISkill;
 //import com.tang.missu.sample.hero.Diana;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +49,11 @@ public class BannerController {
     * */
 //    @RequestMapping(value = "/test1",method = {RequestMethod.GET,RequestMethod.POST})
 //    @ResponseBody /*作用是告诉 Spring：请把这个方法的返回值直接作为 HTTP 响应体（Response Body）写回去，不要走视图解析流程*
-    public String test() {
+    public String test () {
         daji.skillA(); // 这里就可以直接调用diana的方法
-        return  "hi,ham，你好，十一月";
+//        throw new Exception("错了");
+        throw new NotFoundException(4001);
+//        return  "hi,ham，你好，十一月";
     }
 
     @RequestMapping(value = "/test1",method = {RequestMethod.GET,RequestMethod.POST})
