@@ -1,6 +1,7 @@
 package com.tang.missu.api.v1;
 
 //import org.springframework.stereotype.Controller;
+import com.tang.missu.dto.PersonDTO;
 import com.tang.missu.exception.http.NotFoundException;
 import com.tang.missu.sample.ISkill;
 //import com.tang.missu.sample.hero.Diana;
@@ -65,9 +66,24 @@ public class BannerController {
     /* 接收参数
     * @PathVariable - 接收路径中的
     * @RequestParam - 接收 ? 后的 query 参数
+    * @RequestBody - 接收body中的参数
     * */
     @GetMapping("/test/params/{id1}")
     public String testParams(@PathVariable(name = "id1")  Integer id,@RequestParam String name){
         return "hi,hanber" + id + name;
     }
+
+    //接收body参数
+    @PostMapping("/test/post")
+    public PersonDTO testPost(@RequestBody PersonDTO person){
+        PersonDTO dto = new PersonDTO("haha",18);
+        return dto;
+//          PersonDTO dto = PersonDTO.builder()
+//                  .name("ber")
+//                  .age(3)
+//                  .build();
+//          return dto;
+
+    }
+
 }
