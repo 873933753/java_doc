@@ -222,13 +222,25 @@ public class ExceptionCodeConfiguration {
 `但此时中文乱码`
 ![message乱码](assets/exception/config_3.png)
 - 配置文件是没有""引号的
+- 调整编辑器文件格式
+![message乱码](assets/exception/editor_utf.png)
+
 
 
 
 # 根据目录结构生成api前缀
 - 每次都要手写 /v1/模块名很麻烦，如果目录层级深更长，之前是使用@RequestMapping("前缀")
-- 要继承 RequestMappingHandleMapping
+- 自定义 AutoPrefixUrlMapping 类要继承 RequestMappingHandleMapping
 - 覆盖 getMappingForMethod 方法，先接收RequestMappingInfo，再修改路由信息  
+- 通过配置类将 AutoPrefixUrlMapping类注入到IOC容器中，配置类需要实现接口 WebMvcRegistrations，重写 RequestMappingHandlerMapping 方法
+- 在配置文件中指定api的根包 @Value("${missu.api-package}")
+- 生成新的api前缀 /v1，合并原有的路径 combine， 并返回新的mappingInfo
+
+1. 自定义 AutoPrefixUrlMapping 类
+- 需要继承RequestMappingHandleMapping类
+```java
+```
+
  
 
 

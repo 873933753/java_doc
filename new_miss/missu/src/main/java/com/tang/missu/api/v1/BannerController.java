@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 //@Controller // 视图
 //@ResponseBody // 可以提到控制器上，就不用每个方法都写@ResponseBody
 @RestController // @RestController 包含了 @Controller和@ResponseBody
-@RequestMapping("/v1/banner") // url都加上前缀
+//@RequestMapping("/v1/banner") // url都加上前缀
+@RequestMapping("/banner")
 //@Lazy // 延迟实例化
 public class BannerController {
 
@@ -61,4 +62,12 @@ public class BannerController {
         return  "test1";
     }
 
+    /* 接收参数
+    * @PathVariable - 接收路径中的
+    * @RequestParam - 接收 ? 后的 query 参数
+    * */
+    @GetMapping("/test/params/{id1}")
+    public String testParams(@PathVariable(name = "id1")  Integer id,@RequestParam String name){
+        return "hi,hanber" + id + name;
+    }
 }
