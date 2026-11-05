@@ -1,0 +1,21 @@
+# 激活指定环境
+spring:
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8081
+
+hero:
+  name: yase
+  condition: anaila
+
+missu:
+  api-package: com.tang.missu.api
+
+mysql:
+  ip: 127.0.0.1
+  port: 3306
