@@ -5,10 +5,14 @@ import com.tang.missu.dto.PersonDTO;
 import com.tang.missu.exception.http.NotFoundException;
 import com.tang.missu.sample.ISkill;
 //import com.tang.missu.sample.hero.Diana;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 //import org.springframework.context.annotation.Lazy;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.Max;
 
 // 注解，给某个类或方法打上标记，就会知道加载它
 //@Controller // 视图
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 //@RequestMapping("/v1/banner") // url都加上前缀
 @RequestMapping("/banner")
 //@Lazy // 延迟实例化
+@Validated
 public class BannerController {
 
     /*注入-setter方式注入*/
@@ -69,14 +74,16 @@ public class BannerController {
     * @RequestBody - 接收body中的参数
     * */
     @GetMapping("/test/params/{id1}")
-    public String testParams(@PathVariable(name = "id1")  Integer id,@RequestParam String name){
+//    @Validated - 这里@Validated写在方法上无效
+    public String testParams(@PathVariable(name = "id1") @Max(10) Integer id, @RequestParam @Length(min = 1,max = 2) String name){
         return "hi,hanber" + id + name;
     }
 
     //接收body参数
+    // @Validated 开启校验
     @PostMapping("/test/post")
-    public PersonDTO testPost(@RequestBody PersonDTO person){
-        PersonDTO dto = new PersonDTO("haha",18);
+    public PersonDTO testPost(@RequestBody @Validated PersonDTO person){
+        PersonDTO dto = new PersonDTO(person.getName(),person.getAge(),person.getSchoolDTO());
         return dto;
 //          PersonDTO dto = PersonDTO.builder()
 //                  .name("ber")
