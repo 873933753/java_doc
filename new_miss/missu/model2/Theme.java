@@ -1,4 +1,4 @@
-package com.tang.missu.model;
+package com.tang.missu.model2;
 
 import javax.persistence.*;
 import java.util.List;

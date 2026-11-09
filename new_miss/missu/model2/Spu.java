@@ -1,10 +1,7 @@
-package com.tang.missu.model;
+package com.tang.missu.model2;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import java.util.List;
 
 @Entity
 public class Spu {

@@ -254,3 +254,11 @@ spring:
 ## 索引是物理外键
 - 如何禁止JPA生成物理外键
 
+
+
+# controller中不写业务
+# service层写业务，@service打在实现类上
+# repositry接口继承JpaRepositry接口
+- jpa可以不写查询数据库的实现，它里面已经有
+# Service层调用 repositry 层 
+- 将 repositry注入到Service实现中

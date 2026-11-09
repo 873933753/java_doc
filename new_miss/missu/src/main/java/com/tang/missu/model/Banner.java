@@ -1,24 +1,39 @@
 package com.tang.missu.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.time.Instant;
 
+@Getter
+@Setter
 @Entity
-@Table(name = "banner2") // 数据库中表明重命名 banner1
-public class Banner {
-    @Id // 给Entity打标识，javax.persistence的
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // id自增长
-    private long id;
+@Table(name = "banner")
+public class Banner extends BaseModel{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", columnDefinition = "int UNSIGNED not null")
+    private Long id;
 
-    @Column(length = 16) // 限制表中name长度16
+    @Size(max = 255)
+    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Transient // 表明字段不会映射到表中
+    @Size(max = 255)
+    @Column(name = "description")
     private String description;
-    private String img;
+
+    @Size(max = 255)
+    @Column(name = "title")
     private String title;
 
-    @OneToMany
-    @JoinColumn(name = "bannerId")
-    List<BannerItem> bannerItems;
+    @Size(max = 255)
+    @Column(name = "img")
+    private String img;
+
+
 }

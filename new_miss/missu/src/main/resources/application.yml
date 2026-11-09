@@ -4,7 +4,7 @@ spring:
     active: dev
   jpa:
     hibernate:
-      ddl-auto: create-drop # update
+      ddl-auto: none # update，create-drop，none 不根据Model生表
 
 server:
   port: 8081
