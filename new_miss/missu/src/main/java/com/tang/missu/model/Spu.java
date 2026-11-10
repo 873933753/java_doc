@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -75,5 +76,22 @@ public class Spu extends BaseModel{
     @Column(name = "for_theme_img")
     private String forThemeImg;
 
+    /* 导航关系配置
+    * Spu 对 SpuImg - 1对多，一个商品有多张Banner图。
+    * SPu 对 SpuDetailImg - 1对多，一个商品对应多张详情图。
+    * Spu 对 Sku - 1对多，一个商品对应多个规格SKU。
+    *  */
+
+    @OneToMany
+    @JoinColumn(name = "spu_id")
+    private List<SpuImg> spuImgs;
+
+    @OneToMany
+    @JoinColumn(name = "spu_id")
+    private  List<SpuDetailImg> spuDetailImgs;
+
+    @OneToMany
+    @JoinColumn(name = "spu_id")
+    private List<Sku> skus;
 
 }

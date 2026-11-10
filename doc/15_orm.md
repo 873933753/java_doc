@@ -110,14 +110,143 @@ delete_time.NULL-不勾选
 
 - 缺少数据
 顶部轮播图，详情图，优惠券，sku
-1. 轮播图与spu是 1对多的关系，新建spu_img表
-2. 详情图与spu，1对多，新建spu_detail_img 表
-3. sku，sku里很复杂，但是先只考虑spu和sku的关系（延迟思考，逐层深入），先新建sku表
+1. 轮播图与spu是 1对多的关系，新建spu_img 实体
+2. 详情图与spu，1对多，新建spu_detail_img 实体
+3. spu与sku，1对多，sku里很复杂，但是先只考虑spu和sku的关系（延迟思考，逐层深入），先新建sku实体
+
+## 如何配置导航关系
+- spuModel需要SpuDetailImg -> 在SpuModel中配置导航关系（即通过spu查详情，而不需要通过详情图片查spu）
+- 即在SpuModel中配置对SpuImg SpuDetailImg Sku的关系，并指定外键名
+
+`配置导航属性后： detail接口` 
+- 会返回配置的导航属性
+```json
+{
+    "id": 2,
+    "title": "针织衫",
+    "subtitle": "秋日红框，浪漫满屋",
+    "categoryId": 12,
+    "rootCategoryId": 2,
+    "online": true,
+    "price": "77.00",
+    "sketchSpecId": 1,
+    "defaultSkuId": 2,
+    "img": "xxx",
+    "discountPrice": "62",
+    "description": null,
+    "tags": "秋日冬款$浪漫满屋",
+    "isTest": false,
+    "forThemeImg": "yyy",
+    "spuImgs": [
+        {
+            "id": 139,
+            "img": "xss",
+            "spuId": 2
+        }
+    ],
+    "spuDetailImgs": [
+        {
+            "id": 138,
+            "img": "xxx",
+            "spuId": 2,
+            "index": 0
+        },
+        {
+            "id": 139,
+            "img": "aaa",
+            "spuId": 2,
+            "index": 1
+        }
+    ],
+    "skus": [
+        {
+            "id": 2,
+            "price": 77.76,
+            "discountPrice": null,
+            "online": true,
+            "img": "xxx",
+            "title": "七龙珠",
+            "spuId": 2,
+            "specs": null,
+            "code": "1$1-1#2-5",
+            "stock": 0,
+            "categoryId": 28,
+            "rootCategoryId": 27
+        }
+    ]
+}
+```
 
 
+`问题： `
+此时的列表接口数据：
+- 但是很多属性列表接口不需要。只需要部分的基础数据，如何精简数据？ -- 视图层 VO
+- 性能问题。先查Spu表，再去查Spu Detail Image表，再查Spu Image表，再查SKU表，如何优化？
+
+```json
+[
+    {
+        "id": 2,
+        "title": "针织衫",
+        "subtitle": "秋日红框，浪漫满屋",
+        "categoryId": 12,
+        "rootCategoryId": 2,
+        "online": true,
+        "price": "77.00",
+        "sketchSpecId": 1,
+        "defaultSkuId": 2,
+        "img": "xxx",
+        "discountPrice": "62",
+        "description": null,
+        "tags": "秋日冬款$浪漫满屋",
+        "isTest": false,
+        "forThemeImg": "yyy",
+        "spuImgs": [
+            {
+                "id": 139,
+                "img": "xss",
+                "spuId": 2
+            }
+        ],
+        "spuDetailImgs": [
+            {
+                "id": 138,
+                "img": "xxx",
+                "spuId": 2,
+                "index": 0
+            },
+            {
+                "id": 139,
+                "img": "aaa",
+                "spuId": 2,
+                "index": 1
+            }
+        ],
+        "skus": [
+            {
+                "id": 2,
+                "price": 77.76,
+                "discountPrice": null,
+                "online": true,
+                "img": "xxx",
+                "title": "七龙珠",
+                "spuId": 2,
+                "specs": null,
+                "code": "1$1-1#2-5",
+                "stock": 0,
+                "categoryId": 28,
+                "rootCategoryId": 27
+            }
+        ]
+    }
+]
+```
 
 
 `列表接口：（具有代表性） /latest`
+## 但是很多属性列表接口不需要。只需要部分的基础数据，如何精简数据？ -- 视图层 VO
+- 新建子包vo(view object)视图对象，dto定义的是接收数据的对象（作数据校验），vo是服务端返回前端的对象
+- 新建SpuSimplifyVO，里面写前端需要的属性
 
 
 
