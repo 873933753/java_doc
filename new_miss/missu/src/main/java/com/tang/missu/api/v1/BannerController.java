@@ -1,5 +1,6 @@
 package com.tang.missu.api.v1;
 
+import com.tang.missu.exception.http.NotFoundException;
 import com.tang.missu.model.Banner;
 import com.tang.missu.service.BannerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,11 @@ public class BannerController {
     @GetMapping("name/{name}")
     public Banner test(@PathVariable(name = "name") String name){
 //        return bannerService.getByName(name);
+        Banner banner = bannerService.getByName(name);
+        // 判空抛提示
+        if(banner == null) {
+            throw new NotFoundException(30005);
+        }
         return bannerService.getByName(name);
     }
 

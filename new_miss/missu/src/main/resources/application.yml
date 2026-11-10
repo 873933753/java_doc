@@ -5,6 +5,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none # update，create-drop，none 不根据Model生表
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: true # 时间格式按照时间戳返回
 
 server:
   port: 8081

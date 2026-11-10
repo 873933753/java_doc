@@ -50,3 +50,87 @@ delete_time.NULL-不勾选
 
 > 新版，在 DataBase中找到要导出Model的表，右键 -> Create JPA Entities from DB
 
+## 写接口步骤
+0. Controller中注入Service层，调用Service层的业务（Service接口）
+1. Service业务层（ServiceImpl）注入 Repository，实现业务逻辑
+2. Repository接口（操作数据库），继承 JpaRepository<第一个参数是要操作的实体，第二个参数是实体的主键id类型>
+3. Model层模型映射
+- 导入SQL -> Model
+- Entity实体
+- jackson格式 
+4. 接口判空返回code码
+
+
+# theme - 主题（首页的各个模块）
+- 数据库扩展手段：表的列 ，不具备扩展性。行就被扩展性。可考虑config表
+
+## theme表和spu表是多对多的关系
+- theme 主体表，spu商品表
+
+## spu表
+- price 文本类型，前端展示的价格。字段没有确定的意义，文本最方便，可转数字类型
+
+### spu接口(类上才打@Service和@Repository)
+- spu列表和详情
+- 返回类型是实体决定的，如online表里是1，但是实体类型改成Boolean返回的是true
+
+`详情接口：`
+1. 导入spu表的SQL -> Entity加上Getter和Setter
+2. 详情接口 - 
+1) 新建spuController - getDetail /id/{id}/detail，id简单验证@Positive,作用类上要加@Validated
+```java
+@RestController
+@RequestMapping("/spu")
+```
+2) 新建spuService接口及实现（@Service要打在实现类上）
+3) 新建SpuRepository接口 继承 JpaRepository<第一个参数是要操作的实体Spu，第二个参数是实体的主键id类型>
+- 定义findOneById,Service中注入SpuRepository并调用该方法
+4) spuController中注册spuService，调用spuService的方法 getSpu，判空code码 30003，该 商品不存在
+
+目前数据：
+```json
+{
+    "id": 2,
+    "title": "针织衫",
+    "subtitle": "秋日红框，浪漫满屋",
+    "categoryId": 12,
+    "rootCategoryId": 2,
+    "online": true,
+    "price": "77.00",
+    "sketchSpecId": 1,
+    "defaultSkuId": 2,
+    "img": "xxx",
+    "discountPrice": "62",
+    "description": null,
+    "tags": "秋日冬款$浪漫满屋",
+    "isTest": false,
+    "forThemeImg": "yyy"
+}
+```
+
+- 缺少数据
+顶部轮播图，详情图，优惠券，sku
+1. 轮播图与spu是 1对多的关系，新建spu_img表
+2. 详情图与spu，1对多，新建spu_detail_img 表
+3. sku，sku里很复杂，但是先只考虑spu和sku的关系（延迟思考，逐层深入），先新建sku表
+
+
+
+
+`列表接口：（具有代表性） /latest`
+
+
+
+
+
+# SpingBoot中静态资源的访问
+- 文件放在resources/static 目录下,改文件夹下课新建任意包
+- 安装依赖，模板渲染（经测试，未安装依赖也可以访问图片）
+```xml
+<dependency>
+  <groupId>springframework.boot</groupId>
+  <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+```
+
+

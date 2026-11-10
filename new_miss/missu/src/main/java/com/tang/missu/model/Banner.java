@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -35,5 +36,12 @@ public class Banner extends BaseModel{
     @Column(name = "img")
     private String img;
 
+    // 关联BannerItem
+    /* 1）表之间的关系 @OneToMany
+       2）关联外键名 - 通过外键建立关系
+     */
+    @OneToMany(fetch = FetchType.LAZY) // 懒加载
+    @JoinColumn(name = "banner_id")
+    private List<BannerItem> items;
 
 }
