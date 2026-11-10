@@ -1,9 +1,14 @@
 package com.tang.missu.vo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@Getter
+@Setter
 public class SpuSimplifyVO {
     private Long id;
 
@@ -16,14 +21,6 @@ public class SpuSimplifyVO {
     @Column(name = "subtitle", length = 800)
     private String subtitle;
 
-    @Column(name = "category_id", columnDefinition = "int UNSIGNED not null")
-    private Long categoryId;
-
-    @Column(name = "root_category_id")
-    private Long rootCategoryId;
-
-    @Column(name = "online", columnDefinition = "tinyint UNSIGNED not null")
-    private Boolean online;
 
 
     @Size(max = 20)

@@ -242,11 +242,31 @@ delete_time.NULL-不勾选
 ]
 ```
 
-
-`列表接口：（具有代表性） /latest`
+`/id/{id}/simpliy,spu数据简化接口：`
 ## 但是很多属性列表接口不需要。只需要部分的基础数据，如何精简数据？ -- 视图层 VO
 - 新建子包vo(view object)视图对象，dto定义的是接收数据的对象（作数据校验），vo是服务端返回前端的对象
 - 新建SpuSimplifyVO，里面写前端需要的属性
+- 如何将属性值拷贝到VO中？- 使用java的工具集 BeanUtils.copyProperties(数据源，要拷贝到的对象)
+`当前数据：`
+```json
+{
+    "id": 2,
+    "title": "针织衫",
+    "subtitle": "秋日红框，浪漫满屋",
+    "price": "77.00",
+    "sketch_spec_id": 1,
+    "default_sku_id": 2,
+    "img": "xxx",
+    "discount_price": "62",
+    "description": null,
+    "tags": "秋日冬款$浪漫满屋"
+}
+```
+
+
+`列表接口：（具有代表性） /latest`
+- 列表的数据如何将一组数据赋给vo呢？安装依赖 dozermapper 处理List的属性拷贝
+
 
 
 

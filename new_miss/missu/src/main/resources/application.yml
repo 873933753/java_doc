@@ -8,6 +8,7 @@ spring:
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: true # 时间格式按照时间戳返回
+    property-naming-strategy: SNAKE_CASE # create_time
 
 server:
   port: 8081

@@ -13,7 +13,7 @@ import javax.validation.constraints.Max;
 @AllArgsConstructor //lombok - 生成全参的构造函数
 @NoArgsConstructor // lombok - 生成无参的构造函数
 //@RequiredArgsConstructor
-//@Builder // lombok
+//@Builder // lombok 不用每个成员变量都写setter赋值,且实例化时可以传参
 public class PersonDTO {
     @NonNull // lombok - 创建name的构造函数
     @Length(min = 1,max = 3,message = "长度在1-3之间")
