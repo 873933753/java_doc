@@ -105,8 +105,13 @@ public class SpuController {
 
     /* 根据分类id查spu列表 */
     @GetMapping("/by/category/{id}")
-    public String getByCategoryIdList(@PathVariable(name = "id") @Positive Long id,
-                                      @RequestParam(name = "is_root",defaultValue = "false") Boolean isRoot){
-        return "sss" + id;
+    public PagingDozer<Spu,SpuSimplifyVO> getByCategoryIdList(@PathVariable(name = "id") @Positive Long id,
+                                      @RequestParam(name = "is_root",defaultValue = "false") Boolean isRoot,
+                                      @RequestParam(defaultValue = "0") Integer start,
+                                      @RequestParam(defaultValue = "10") Integer count){
+        PageCounter pageCounter= CommonUtil.convertToPageParameter(start,count);
+        Page<Spu> page = this.spuService.getLatestPagingSpuByCategoryId(id,isRoot,pageCounter.getPage(),pageCounter.getSize());
+
+        return new PagingDozer<>(page,SpuSimplifyVO.class);
     }
 }

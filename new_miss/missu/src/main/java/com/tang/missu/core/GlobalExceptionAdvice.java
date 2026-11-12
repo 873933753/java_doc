@@ -77,6 +77,7 @@ public class GlobalExceptionAdvice {
         errors.forEach(error -> errorMsg.append(error.getDefaultMessage()).append(';'));
         return errorMsg.toString();
     }
+
     // url上的参数异常- ConstraintViolationException
     @ExceptionHandler(value = ConstraintViolationException.class)
     @ResponseBody
@@ -84,9 +85,25 @@ public class GlobalExceptionAdvice {
     public UnifyResponse handleConstrainException(HttpServletRequest req,ConstraintViolationException e){
         String requestUrl = req.getRequestURI(); // 获取请求接口名
         String method = req.getMethod(); // 获取请求类型
-        String message = e.getMessage();
+//        String message = e.getMessage();
+        String message = this.formatConstraintMessages(e);
 
         UnifyResponse UniMessage = new UnifyResponse(10001,message,method + " " +requestUrl);
         return UniMessage;
+    }
+    // 自定义方法，将message的处理只取分号后的  "message": "getByCategoryIdList.id: 必须是正数",
+    private String formatConstraintMessages(ConstraintViolationException e) {
+        StringBuilder errorMsg = new StringBuilder();
+        e.getConstraintViolations().forEach(v -> {
+            String path = v.getPropertyPath().toString();   // getByCategoryIdList.id
+            String msg  = v.getMessage();                   // getByCategoryIdList.id: 必须是正数
+            String prefix = path + ": ";
+            if (msg.startsWith(prefix)) {
+                msg = msg.substring(prefix.length());       // 必须是正数
+            }
+            String paramName = path.substring(path.lastIndexOf(".") + 1);   // id
+            errorMsg.append(paramName).append(" ").append(msg).append(";");
+        });
+        return errorMsg.toString();
     }
 }

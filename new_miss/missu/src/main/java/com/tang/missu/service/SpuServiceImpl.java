@@ -32,4 +32,19 @@ public class SpuServiceImpl implements SpuService{
         Page<Spu> spus = this.spuRepository.findAll(page);
         return spus;
     }
+
+    /* 根据cid查列表：排序已写在方法名 OrderByCreateTimeDesc 里，Pageable 不再重复带 Sort */
+    @Override
+    public Page<Spu> getLatestPagingSpuByCategoryId(Long cId,Boolean isRoot, Integer pageNum, Integer size) {
+        Pageable page = PageRequest.of(pageNum,size);
+        // 如果是root的根据root查，如果不是root的分类，根据cid查
+        Page<Spu> spus = null;
+        if (isRoot) {
+            spus = this.spuRepository.findByRootCategoryIdOrderByCreateTimeDesc(cId,page);
+        }else{
+            spus = this.spuRepository.findByCategoryIdOrderByCreateTimeDesc(cId,page);
+        }
+//        Page<Spu> spus = this.spuRepository.findByCategoryIdOrderByCreateTimeDesc(cId,page);
+        return spus;
+    }
 }

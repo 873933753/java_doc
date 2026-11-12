@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/* VO层 */
+/* 简化spu的展示数据 */
 @Getter
 @Setter
 public class SpuSimplifyVO {

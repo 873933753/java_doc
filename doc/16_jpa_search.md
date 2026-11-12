@@ -174,7 +174,103 @@ public class PagingDozer<T,K> extends Paging {
 1. 导入分类表
 2. 使用JPA带条件查询（命名方式推导出的SQL语句）
 3. 校验返回Message的处理。(可以截取前面不要的，不要返回给前端。)
+```json
+
+```
 
 
 
-#` 规格
+
+# sku关于规格字段的设计 sku_spec 表
+`之前的sku表的字段：`
+![sku表的字段](assets/16/sku_1.png)
+- spec是属于sku的，之间是什么关系？ 多对多的关系（如果没有standard可以设计成1对多的关系）
+
+## 规格相关概念
+Spec_Key: 颜色；尺码
+Spec_value：橙色，黑色；S，M，L，XL
+
+1. Spec_Key 和 Spec_value 两个实体，两个表
+1 对 多的关系 - 一个key会有多个value，通过specId关联
+
+2. spec 和 spu是多对多的关系，中间表 spu_key（规格名和spu建立多对多的关系，外键 spec_key_id 和 spu_id）
+
+3. 每个sku有不用颜色（规格值），即sku和spec_value是多对多的关系，中间表sku_spec
+- sku_spec表的外键按理说是：sku_id 和 value_id （但是多设计了两个冗余字段，spu_id,key_id）
+
+  
+`sku 中的code`
+- 唯一编码，相当一个协议，这个串码可以表达一个sku（15$1-19#6-28）
+
+SpuId $ specKey1-specValue1  # specKey2 - specValue2
+15$1-19#6-28
+
+
+## 返回给前端json数据格式的处理
+> 问题：skuModel中的specs是String类型，数据库中sepcs是json类型，返回前端是字符串类型的specs不好处理
+ ![skuModel中的specs](assets/16/specs_0.png)
+ ![返回给前端的specs](assets/16/specs_1.png)
+
+ - 解决办法，定义一个spec的类返回给前端
+ > 新的问题：
+// 这里定义Spec类，但是实体中的成员类型要和数据库一致，specs在数据库中是json类型，而且其他地方也要每次定义类
+// 想要实现一个共同的，且数组类型的映射和单一的Object类型的映射不一样
+
+1. 单体JSON与Map的映射
+- 目前新增一个字段test，返回给前端：
+```json
+"test": "{\"key\": \"尺寸\", \"value\": \"7英寸\", \"key_id\": 2, \"value_id\": 5}"
+```
+- AttributeConverter<当前实体当前字段类型，字段在数据库中的类型String>，java没有json类型
+
+```java
+// 转换器
+/* 处理单体Json的映射 */
+//@Convert // 转换器,需要配AttributeConverter，JPA 在存取字段时，就会自动调用 MapAndJson 来完成转换。
+// AttributeConverter<当前实体当前字段类型，字段在数据库中的类型String>>
+@Component
+public class MapAndJson implements AttributeConverter<Map<String,Object>,String> {
+
+    @Autowired
+    private ObjectMapper mapper;
+
+    @Override
+    public String convertToDatabaseColumn(Map<String, Object> stringObjectMap) {
+        try {
+            return mapper.writeValueAsString(stringObjectMap);
+        } catch (JsonProcessingException e) {
+            throw new ServerErrorException(9999);
+        }
+    }
+
+    @Override
+    public Map<String, Object> convertToEntityAttribute(String s) {
+        // 判空 - 数据库如果没有数据不判空会报错
+        if (s == null || s.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            return mapper.readValue(s, HashMap.class);
+        } catch (JsonProcessingException e) {
+            throw new ServerErrorException(9999);
+        }
+    }
+}
+
+
+// 使用
+@Convert(converter = MapAndJson.class )
+private Map<String,Object> test;
+```
+此时前端返回数据：
+```json
+"test": {
+    "key_id": 2,
+    "value_id": 5,
+    "value": "7英寸",
+    "key": "尺寸"
+}
+```
+
+2. 数据类型JSON与List的映射
+- ListAndJson

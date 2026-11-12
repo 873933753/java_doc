@@ -9,4 +9,5 @@ import java.util.List;
 public interface SpuService {
     Spu getSpu(Long id);
     Page<Spu> getLatestPagingSpu(Integer pageNum,Integer size);
+    Page<Spu> getLatestPagingSpuByCategoryId(Long cId,Boolean isRoot,Integer PageNum,Integer size);
 }
