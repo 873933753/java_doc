@@ -105,7 +105,8 @@ public class SpuController {
 
     /* 根据分类id查spu列表 */
     @GetMapping("/by/category/{id}")
-    public String getByCategoryIdList(){
-        return "sss";
+    public String getByCategoryIdList(@PathVariable(name = "id") @Positive Long id,
+                                      @RequestParam(name = "is_root",defaultValue = "false") Boolean isRoot){
+        return "sss" + id;
     }
 }

@@ -167,6 +167,14 @@ public class PagingDozer<T,K> extends Paging {
 - 两级分类推荐用第一种，如果分类层级较多或者无限级推荐路径表示法更好。
 
 
-## 写api - 根据分类id查spu
+## 写api - 根据分类id查spu，/by/category/{id}
 - 根据一级分类查spu列表
 - 或者 根据二级分类查spu列表
+
+1. 导入分类表
+2. 使用JPA带条件查询（命名方式推导出的SQL语句）
+3. 校验返回Message的处理。(可以截取前面不要的，不要返回给前端。)
+
+
+
+#` 规格
