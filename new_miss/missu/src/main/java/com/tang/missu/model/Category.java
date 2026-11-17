@@ -28,7 +28,7 @@ public class Category extends BaseModel{
     private String description;
 
     @Column(name = "is_root", columnDefinition = "tinyint UNSIGNED not null")
-    private Short isRoot;
+    private Boolean isRoot;
 
     @Column(name = "parent_id", columnDefinition = "int UNSIGNED")
     private Long parentId;
@@ -38,7 +38,7 @@ public class Category extends BaseModel{
     private String img;
 
     @Column(name = "`index`", columnDefinition = "int UNSIGNED")
-    private Long index;
+    private Long index; // 排序
 
     @Column(name = "online", columnDefinition = "int UNSIGNED")
     private Long online;

@@ -21,6 +21,7 @@ public class MapAndJson implements AttributeConverter<Map<String,Object>,String>
     @Autowired
     private ObjectMapper mapper;
 
+    // 序列化， - Java -> 数据库
     @Override
     public String convertToDatabaseColumn(Map<String, Object> stringObjectMap) {
         try {
@@ -30,6 +31,7 @@ public class MapAndJson implements AttributeConverter<Map<String,Object>,String>
         }
     }
 
+    // 反序列化， 数据库 -> Java
     @Override
     public Map<String, Object> convertToEntityAttribute(String s) {
         // 判空 - 数据库如果没有数据不判空会报错

@@ -3,6 +3,7 @@ package com.tang.missu.api.v1;
 import com.tang.missu.exception.http.NotFoundException;
 import com.tang.missu.model.Banner;
 import com.tang.missu.service.BannerService;
+import org.hibernate.annotations.Where;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
