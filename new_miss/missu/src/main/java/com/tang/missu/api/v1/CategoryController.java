@@ -2,9 +2,13 @@ package com.tang.missu.api.v1;
 
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
+import com.tang.missu.exception.http.NotFoundException;
 import com.tang.missu.model.Category;
+import com.tang.missu.model.GridCategory;
 import com.tang.missu.service.CategoryService;
+import com.tang.missu.service.GridCategoryService;
 import com.tang.missu.vo.CategoriesAllVO;
+import com.tang.missu.vo.CategoriesTreeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +24,9 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private GridCategoryService gridCategoryService;
 
     /*@GetMapping("/all")
     public List<CategoriesAllVO> getAll(){
@@ -39,5 +46,20 @@ public class CategoryController {
         return new CategoriesAllVO(categories);
     }
 
+    /* 树状返回分类列表 */
+    @GetMapping("/tree")
+    public CategoriesTreeVO getTree() {
+        return new CategoriesTreeVO(categoryService.getAll());
+    }
+
+    /* 宫格分类 */
+    @GetMapping("/grid/all")
+    public List<GridCategory> getGridCategoryList(){
+        List<GridCategory> gridCategoryList = gridCategoryService.getGridCategoryList();
+        if (gridCategoryList.isEmpty()){
+            throw new NotFoundException(30009);
+        }
+        return gridCategoryList;
+    }
 
 }

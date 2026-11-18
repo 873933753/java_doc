@@ -16,8 +16,9 @@ public class CategoriesAllVO {
     private List<CategoryPureVO> roots;
     private List<CategoryPureVO> subs;
 
+    // {"root":[],"subs":[]}
     public CategoriesAllVO(Map<Integer,List<Category>> map){
-        // 处理两个数组
+        // 处理两个数组,每一个属性赋值
         this.roots = map.get(1).stream()
                 .map(r -> {return new CategoryPureVO(r);})
                 .collect(Collectors.toList());
