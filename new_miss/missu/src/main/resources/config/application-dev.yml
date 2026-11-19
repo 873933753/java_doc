@@ -11,3 +11,8 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+
+missu:
+  security:
+    jwt-key: 7777hanber
+    token-expired-in: 8640000 # 过期时间

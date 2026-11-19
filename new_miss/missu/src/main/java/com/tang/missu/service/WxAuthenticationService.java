@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tang.missu.exception.http.ParameterException;
 import com.tang.missu.model.User;
 import com.tang.missu.respoitory.UserRepository;
+import com.tang.missu.utils.JwtToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class WxAuthenticationService {
     private UserRepository userRepository;
 
 
-    /* 注入配置文件的参数 */
+    /* 注入配置文件的微信链接参数 */
     @Value("${wx.code2Session}")
     private String code2SessionUrl;
     @Value("${wx.appId}")
@@ -75,8 +76,8 @@ public class WxAuthenticationService {
 
         // 1）如果openid存在 - 返回JWT令牌
         if (userOptional.isPresent()){
-
-            return "用户存在";
+            // "用户存在"
+            return "用户存在：" + JwtToken.makeToken(userOptional.get().getId());
         }
 
         // 2）如果openid不存在 - 传入openid写入用户（目前只写入openid）
@@ -85,10 +86,10 @@ public class WxAuthenticationService {
                 .build();
         userRepository.save(user);
         Long uid = user.getId();
-        // 返回JWT令牌
-
-
-        return "用户不存在" + uid;
+        // 返回JWT令牌 - 获取jwt令牌
+        String jwt = JwtToken.makeToken(uid);
+        // "用户不存在"
+        return "用户不存在：" + jwt;
     }
 
 
