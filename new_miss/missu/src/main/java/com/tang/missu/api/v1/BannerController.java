@@ -1,5 +1,6 @@
 package com.tang.missu.api.v1;
 
+import com.tang.missu.core.interceptors.ScopeLevel;
 import com.tang.missu.exception.http.NotFoundException;
 import com.tang.missu.model.Banner;
 import com.tang.missu.service.BannerService;
@@ -18,6 +19,7 @@ public class BannerController {
     @Autowired
     private BannerService bannerService;
 
+    @ScopeLevel() // 需要10的等级才能请求
     @GetMapping("name/{name}")
     public Banner test(@PathVariable(name = "name") String name){
 //        return bannerService.getByName(name);

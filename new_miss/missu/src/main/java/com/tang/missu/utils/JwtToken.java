@@ -1,14 +1,15 @@
 package com.tang.missu.utils;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /* Jwt令牌生成，验证 */
 @Component // 不加@Component，启动不会扫@Value
@@ -69,5 +70,35 @@ public class JwtToken {
         map.put("now", now);
         map.put("expiredTime", calendar.getTime());
         return map;
+    }
+
+    /*---校验令牌---*/
+    // 获取token并解析令牌，令牌校验未
+    public static Optional<Map<String, Claim>> getClaims(String token){
+        // 解析令牌
+        Algorithm algorithm = Algorithm.HMAC256(JwtToken.jwtKey);
+        JWTVerifier jwtVerifier = JWT.require(algorithm).build();
+        // 读取token
+        DecodedJWT decodedJWT;
+        // 异常处理 - verify可能是校验失败异常
+        try {
+            decodedJWT = jwtVerifier.verify(token);
+        }catch (JWTVerificationException e) {
+            return Optional.empty(); // Optional 返回空值
+        }
+        return Optional.of(decodedJWT.getClaims()); // Optional 返回非空值
+    }
+
+
+    /* 验证token是否有效 */
+    public static Boolean verifyToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(JwtToken.jwtKey);
+            JWTVerifier verifier = JWT.require(algorithm).build();
+            verifier.verify(token);
+        } catch (JWTVerificationException e) {
+            return false;
+        }
+        return true;
     }
 }

@@ -77,7 +77,7 @@ public class WxAuthenticationService {
         // 1）如果openid存在 - 返回JWT令牌
         if (userOptional.isPresent()){
             // "用户存在"
-            return "用户存在：" + JwtToken.makeToken(userOptional.get().getId());
+            return JwtToken.makeToken(userOptional.get().getId());
         }
 
         // 2）如果openid不存在 - 传入openid写入用户（目前只写入openid）
@@ -89,7 +89,7 @@ public class WxAuthenticationService {
         // 返回JWT令牌 - 获取jwt令牌
         String jwt = JwtToken.makeToken(uid);
         // "用户不存在"
-        return "用户不存在：" + jwt;
+        return jwt;
     }
 
 
